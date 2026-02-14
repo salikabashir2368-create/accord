@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Accord ❤️</title>
+<link href="https://fonts.googleapis.com/css2?family=Coquette&display=swap" rel="stylesheet">
+<style>
+:root {
+  --pink-light:#F7DAE7;
+  --pink-mid:#E2B4C1;
+  --pink-dark:#D38C9D;
+  --pink-deep:#A55966;
+}
+
+body {
+  margin:0;
+  font-family:'Coquette', cursive;
+  background:var(--pink-light);
+  overflow:hidden;
+}
+
+/* HEARTS */
+.heart {
+  position:absolute;
+  font-size:24px;
+  animation:float 3s ease forwards;
+  pointer-events:none;
+}
+@keyframes float {
+  from {opacity:1;}
+  to {opacity:0; transform:translate(var(--x),var(--y)) scale(0.5);}
+}
+
+/* Pages */
+.page {position:absolute; inset:0; display:flex; justify-content:center; align-items:center; flex-direction:column; transition:opacity 1s ease;}
+.page-hidden {opacity:0; pointer-events:none;}
+
+/* Landing */
+#weddingBtn {font-size:4em; background:none; border:none; cursor:pointer;}
+
+/* Envelope */
+#envelope {width:260px; height:190px; background:var(--pink-mid); border-radius:15px; display:flex; justify-content:center; align-items:center; position:relative;}
+#waxSeal {position:absolute; bottom:10px; width:55px; height:55px; background:var(--pink-dark); border-radius:50%; display:flex; justify-content:center; align-items:center; cursor:pointer;}
+#letter {background:white; padding:15px; border-radius:8px; text-align:center; opacity:0; cursor:pointer; transition:1s;}
+
+/* Quiz */
+.quizBox, .accordBox, .consentBox, .duaBox {background:white; padding:25px; border-radius:20px; width:90%; max-width:500px; text-align:center;}
+.optionBtn, .qBtn, .consentBtn, #finalBtn {width:100%; margin:8px 0; padding:10px; border:none; border-radius:15px; background:var(--pink-mid); cursor:pointer;}
+.optionBtn:hover, .qBtn:hover, .consentBtn:hover, #finalBtn:hover {background:var(--pink-dark); color:white;}
+
+/* Accord checkboxes */
+.checkBtn {display:block; margin:10px auto; padding:10px 15px; border-radius:15px; background:var(--pink-mid); cursor:pointer; width:60%; text-align:center;}
+.checkBtn:hover {background:var(--pink-dark); color:white;}
+
+/* Hover reveal */
+.hoverText {margin-top:15px; cursor:pointer; color:var(--pink-dark);}
+.hoverBox {display:none; background:var(--pink-mid); color:white; padding:10px; border-radius:10px; margin-top:5px; max-width:300px;}
+
+/* Slider */
+.sliderContainer {margin:15px 0;}
+.slider {width:100%;}
+
+/* Dua button */
+#finalBtn {margin-top:15px; background:var(--pink-deep); color:white; font-size:1.2em;}
+</style>
+</head>
+<body>
+
+<!-- AUDIO -->
+<audio id="bgMusic" loop>
+  <source src="haaniya.mp3" type="audio/mpeg">
+</audio>
+
+<!-- Landing Page -->
+<div id="landingPage" class="page">
+  <h1>Dear Future Husband</h1>
+  <p>ATIQ KHURSHID 💕</p>
+  <button id="weddingBtn">💍</button>
+</div>
+
+<!-- Envelope Page -->
+<div id="envelopePage" class="page page-hidden">
+  <div id="envelope">
+    <div id="letter">Tap if you’re going to stick with the mistake you claimed.😉</div>
+    <div id="waxSeal">🕊️</div>
+  </div>
+</div>
+
+<!-- First Quiz Page -->
+<div id="quizPage" class="page page-hidden">
+  <div class="quizBox">
+    <h2 id="question"></h2>
+    <div id="options"></div>
+  </div>
+</div>
+
+<!-- Unity Accord Page -->
+<div id="accordPage" class="page page-hidden">
+  <div class="accordBox">
+    <h2>The Unity Accord </h2>
+    <p>This is to formally celebrate the forthcoming union of<br><b>SB</b> and <b>Atiq Khurshid</b>.</p>
+    <p>By entering into this accord, Atiq Khurshid affirms his intention to stand by SB with respect, honesty, patience, and responsibility, to support her through challenges and successes, and to grow together in understanding, commitment, and shared purpose. This accord stands as a testament to his consent, intention, and readiness to begin this partnership.</p>
+    <div class="checkBtn" data-checked="false">☐ Qubool Hai</div>
+    <div class="checkBtn" data-checked="false">☐ Qubool Hai</div>
+    <div class="checkBtn" data-checked="false">☐ Qubool Hai</div>
+    <button class="qBtn">Next →</button>
+  </div>
+</div>
+
+<!-- Consent Style Page -->
+<div id="consentPage" class="page page-hidden">
+  <div class="consentBox">
+    <h2>Hahaha… your fate is now entwined with mine ✨. Will you embrace the enchantment?</h2>
+    <div class="consentBtn">☐ Fully 😏</div>
+    <div class="consentBtn">☐ Hesitant 😅</div>
+    <div class="consentBtn">☐ Already yours ❤️</div>
+
+    <div class="hoverText">Hover or tap to reveal a message 💌</div>
+    <div class="hoverBox"> Relax… this mistake comes with lifetime benefits.😏</div>
+
+    <div class="sliderContainer">
+      <input type="range" min="0" max="2" value="1" class="slider" id="slider">
+      <p id="sliderNote"></p>
+    </div>
+  </div>
+</div>
+
+<!-- Dua Page -->
+<div id="duaPage" class="page page-hidden">
+  <div class="duaBox">
+    <p>Dear Atiq, with sincerity and patience, I place my trust in us.<br>
+    May Allah protect our intentions, deepen our understanding, and guide us toward what is best for both of us.🤍✨</p>
+    <button id="finalBtn">Ameen SumAmeen 💖</button>
+  </div>
+</div>
+
+<script>
+// HEARTS
+function hearts(x,y,count=20){
+  for(let i=0;i<count;i++){
+    const h=document.createElement("div");
+    h.className="heart";
+    h.textContent="💖";
+    h.style.left=x+"px";
+    h.style.top=y+"px";
+    h.style.setProperty("--x",(Math.random()*600-300)+"px");
+    h.style.setProperty("--y",(Math.random()*-600)+"px");
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),3000);
+  }
+}
+
+// MUSIC
+const music = document.getElementById("bgMusic");
+
+// LANDING -> ENVELOPE
+document.getElementById("weddingBtn").onclick=e=>{
+  hearts(e.clientX,e.clientY);
+  music.volume=0; music.play();
+  let vol=0;
+  const fade=setInterval(()=>{vol+=0.02;if(vol>=1){vol=1;clearInterval(fade);}music.volume=vol;},100);
+  setTimeout(()=>{document.getElementById("landingPage").classList.add("page-hidden"); document.getElementById("envelopePage").classList.remove("page-hidden");},700);
+};
+
+// ENVELOPE -> LETTER
+document.getElementById("waxSeal").onclick=()=>{document.getElementById("letter").style.opacity=1;}
+document.getElementById("letter").onclick=()=>{
+  document.getElementById("envelopePage").classList.add("page-hidden");
+  setTimeout(()=>{document.getElementById("quizPage").classList.remove("page-hidden"); showQuestion();},700);
+};
+
+// FIRST QUIZ
+const questions=[{
+q:"Now that this chapter has begun, what’s the vibe?",
+o:["Loving it 😌","Curious but optimistic 😏","Calm, confident, certain 😉","Nervous… in a good way ❤️"]
+}];
+let i=0;
+const qEl=document.getElementById("question");
+const oEl=document.getElementById("options");
+function showQuestion(){
+  if(i<questions.length){
+    qEl.textContent=questions[i].q; oEl.innerHTML="";
+    questions[i].o.forEach(opt=>{
+      const b=document.createElement("button");
+      b.className="optionBtn"; b.textContent=opt;
+      b.onclick=e=>{hearts(e.clientX,e.clientY); setTimeout(()=>{document.getElementById("quizPage").classList.add("page-hidden"); document.getElementById("accordPage").classList.remove("page-hidden");},500);}
+      oEl.appendChild(b);
+    });
+  }
+}
+
+// UNITY ACCORD CHECKBOXES
+document.querySelectorAll(".checkBtn").forEach(btn=>{
+  btn.onclick=e=>{
+    hearts(e.clientX,e.clientY,25);
+    let checked = btn.getAttribute("data-checked") === "true";
+    if(!checked){ btn.textContent="☑ Qubool Hai"; btn.setAttribute("data-checked","true"); }
+    else{ btn.textContent="☐ Qubool Hai"; btn.setAttribute("data-checked","false"); }
+  };
+});
+
+// Next button after accord
+document.querySelector(".qBtn").onclick=e=>{
+  hearts(e.clientX,e.clientY,20);
+  document.getElementById("accordPage").classList.add("page-hidden");
+  document.getElementById("consentPage").classList.remove("page-hidden");
+};
+
+// CONSENT STYLE
+const consentBtns=document.querySelectorAll(".consentBtn");
+consentBtns.forEach(btn=>{
+  btn.onclick=e=>{
+    hearts(e.clientX,e.clientY,30);
+    let msg="";
+    if(btn.textContent.includes(" Fully 😏")) msg="Then we’ll adventure together 💍";
+    else if(btn.textContent.includes("Hesitant 😅")) msg="Then I’ll always wish the best for you 🌟";
+    else msg="I’ve enchanted your good days 💛";
+    alert(msg);
+    document.getElementById("consentPage").classList.add("page-hidden");
+    document.getElementById("duaPage").classList.remove("page-hidden");
+  };
+});
+
+// Hover reveal
+const hoverText=document.querySelector(".hoverText");
+const hoverBox=document.querySelector(".hoverBox");
+hoverText.onmouseenter=hoverText.onclick=()=>{hoverBox.style.display="block";}
+hoverText.onmouseleave=()=>{hoverBox.style.display="none";}
+
+// Slider
+const slider=document.getElementById("slider");
+const sliderNote=document.getElementById("sliderNote");
+slider.oninput=()=>{ 
+  let val=slider.value; 
+  if(val==0) sliderNote.textContent="Then we’ll adventure together 💍";
+  else if(val==1) sliderNote.textContent= "I’ve enchanted your good days💛";
+  else sliderNote.textContent="Relax… this mistake comes with lifetime benefits.”🌟";
+}
+
+// Dua final button
+document.getElementById("finalBtn").onclick=e=>{
+  const rect=e.target.getBoundingClientRect();
+  hearts(rect.left+rect.width/2, rect.top+rect.height/2,50);
+}
+</script>
+</body>
+</html>
